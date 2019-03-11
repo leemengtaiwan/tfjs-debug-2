@@ -1,0 +1,39 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.15.1/dist/tf.min.js"></script>
+</head>
+<body>
+    <div id="output_field"></div>
+    <div id="result"></div>
+
+    <!-- Replace this with your image. Make sure CORS settings allow reading the image! -->
+    <img id="cat" src="cat.jpg"></img>
+
+</body>
+    <script>
+
+    async function gan() {
+        const MODEL_URL = 'http://localhost:1234/web_model/tensorflowjs_model.pb';
+        const WEIGHTS_URL = 'http://localhost:1234/web_model/weights_manifest.json';
+
+        const model = await tf.loadFrozenModel(MODEL_URL, WEIGHTS_URL);
+        console.log("Model loaded.");
+        console.log(model);
+        const cat = document.getElementById('cat');
+        t = tf.fromPixels(cat);
+        t = t.toFloat();
+        t = tf.expandDims(t, 0);
+        // model.execute({input: t}).print();
+
+        // tf.toPixels(out, document.getElementById('output_field'))
+        // k = tf.ones([1, 32, 32, 3]);
+        // k = k.toFloat();
+        // k.print();
+        // console.log(model.predict(k));
+        console.log("Start transformation by model...")
+        model.predict(t).dispose();
+
+    }
+    gan()
+    </script>
+</html>
