@@ -1,26 +1,33 @@
 <html>
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.15.1/dist/tf.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.15.1/dist/tf.min.js"></script>-->
+    <script src="dist/tf.js"></script>
 </head>
 <body>
     <div id="output_field"></div>
     <div id="result"></div>
 
     <!-- Replace this with your image. Make sure CORS settings allow reading the image! -->
-    <img id="cat" src="cat.jpg"></img>
+    <img id="cat" src="woman-face.jpg"></img>
 
 </body>
     <script>
 
     async function gan() {
-        const MODEL_URL = 'http://localhost:1234/web_model/tensorflowjs_model.pb';
-        const WEIGHTS_URL = 'http://localhost:1234/web_model/weights_manifest.json';
 
-        const model = await tf.loadFrozenModel(MODEL_URL, WEIGHTS_URL);
+
+        const MODEL_URL = 'http://localhost:1234/json_model/model.json';
+        const model = await tf.loadGraphModel(MODEL_URL);
+
+
         console.log("Model loaded.");
         console.log(model);
         const cat = document.getElementById('cat');
+        let t;
         t = tf.fromPixels(cat);
+
+        // t = tf.ones([32, 32, 3]);
+
         t = t.toFloat();
         t = tf.expandDims(t, 0);
         // model.execute({input: t}).print();
@@ -31,7 +38,7 @@
         // k.print();
         // console.log(model.predict(k));
         console.log("Start transformation by model...")
-        model.predict(t).dispose();
+        console.log(model.predict(t));
 
     }
     gan()
